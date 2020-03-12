@@ -18,6 +18,133 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        ul{
+            margin: 0;
+            padding: 0;
+        }
+
+        li{
+            list-style: none;
+        }
+        .user-wrapper, .message-wrapper{
+            border: 1px solid  #dddddd;
+            overflow-y: auto;
+        }
+
+        .user-wrapper {
+            height: 500px;
+        }
+
+        .user{
+            cursor: pointer;
+            padding: 5px 0;
+            position: relative;
+        }
+
+        .user:hover{
+            background: #eeeeeee;
+        }
+
+        .user: last-child{
+            margin-bottom: 0;
+        }
+
+        .name{
+            margin-top: 4px;
+        }
+
+        .pending{
+            position: absolute;
+            left: 10px;
+            top: 3px;
+            background: #ff5555;
+            margin: 0;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            line-height: 10px;
+            padding-top:2px;
+            padding-left:4px;
+            color: #ffffff;
+            font-size: 12px;
+            border: 2px solid #eeeeee;
+        }
+
+        .media-left{
+            margin: 0 10px;
+        }
+
+        .media-left img {
+            width: 64px;
+            border-radius: 64px;
+        }
+
+        .media-body p{
+            padding: 6px 0;
+        }
+
+        .message-wrapper{
+            padding: 10px;
+            height: 500px;
+            background: #eeeeee;
+        }
+
+        .messages .message{
+            margin-bottom: 15px;
+        }
+
+        .messages .message:last-child{
+            margin-bottom: 0;
+        }
+
+        .received .sent{
+            width: 45px;
+            padding: 3px 10px;
+            border-radius: 10px;
+        }
+
+        .received{
+            background: #ffffff;
+            border-radius: 10px;
+        }
+
+        .sent{
+            background:#dcf8c6;
+            float: right;
+            text-align: right;
+            border-radius: 10px;
+        }
+        .message p{
+            padding: 10px;
+            max-width: 300px;
+        }
+
+        .date{
+            color: #999999;
+            font-size: 0.75em;
+        }
+
+        .active{
+            background: #eeeeee;
+        }
+
+        input[type=text]{
+            width: 100%;
+            padding: 12px 20px;
+            margin: 15px 0 0 0;
+            display: inline-block;
+            border-radius: 4px;
+            box-sizing: border-box;
+            outline: none;
+            border: 1px solid #cccccc;
+        }
+
+        input[type=text]:focus{
+            border: 1px solid #aaaaaa;
+        }
+
+    </style>
 </head>
 <body>
     <div id="app">
@@ -76,5 +203,19 @@
             @yield('content')
         </main>
     </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script>
+        let receiver_id = '';
+        let my_id = '{{ Auth::id() }}';
+        $(document).ready(()=>{
+            $('.user').click(()=>{
+                $('.user').removeClass('active');
+                $(this).addClass('active');
+
+                receiver_id = $(this).attr('id');
+                alert(receiver_id);
+            })
+        })
+    </script>
 </body>
 </html>
