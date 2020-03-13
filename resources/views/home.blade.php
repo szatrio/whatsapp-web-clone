@@ -8,7 +8,7 @@
             <div class="user-wrapper">
                 <ul class="users">
                     @foreach($users as $user)
-                    <li class="user" id="{{ $user->id }}">
+                        <li class="user" id="{{ $user->id }}">
                         <span class="pending">1</span>
                         <div class="media">
                             <div class="media-left">

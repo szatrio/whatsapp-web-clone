@@ -207,15 +207,25 @@
     <script>
         let receiver_id = '';
         let my_id = '{{ Auth::id() }}';
+
         $(document).ready(()=>{
-            $('.user').click(()=>{
+            $('.user').click(function () {
                 $('.user').removeClass('active');
                 $(this).addClass('active');
-
                 receiver_id = $(this).attr('id');
-                alert(receiver_id);
-            })
+                $.ajax({
+                    type: "get",
+                    url: "message/" + receiver_id, 
+                    data: "",
+                    cache: false,
+                    success: function (data) {
+                        $('#messages').html(data);
+                    }
+                });
+            });
         })
+
+        
     </script>
 </body>
 </html>
