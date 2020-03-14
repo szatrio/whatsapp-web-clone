@@ -31,13 +31,16 @@ class HomeController extends Controller
     }
     public function getMessage($user_id, $my_id)
     {
-        $my_id = Auth::id();
-        $messages = Message::where(function ($query) use ($user_id, $my_id){
-            $query->where('from', $my_id)->where('to', $user_id);
-        })->orWhere(function ($query) use ($user_id, $my_id){
-            $query->where('from', $user_id)->where('to', $my_id);
-        })->get();
+        // $my_id = Auth::id();
+        // $messages = Message::where(function ($query) use ($user_id, $my_id){
+        //     $query->where('from', $my_id)->where('to', $user_id);
+        // })->orWhere(function ($query) use ($user_id, $my_id){
+        //     $query->where('from', $user_id)->where('to', $my_id);
+        // })->get();
 
-        return view('messages.index', ['messages'=>$messages]);
+        // return view('messages.index', ['messages'=>$messages]);
+        $mix = $user_id;
+        dd($mix);
+        return $mix;
     }
 }
