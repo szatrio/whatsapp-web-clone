@@ -213,17 +213,14 @@
                 $('.user').removeClass('active');
                 $(this).addClass('active');
                 receiver_id = $(this).attr('id');
-                console.log(receiver_id)
                 $.ajax({
                     type: "get",
                     url: "message/" + receiver_id,
                     data: "",
                     cache: false,
-                    // success: function (data) {
-                        // $('#messages').html(data);
-                        // scrollToBottomFunc();
-                        // console.log(receiver_id)
-                    // }
+                    success: function (data) {
+                        $('#messages').html(data);
+                    }
                 });
             });
         })
