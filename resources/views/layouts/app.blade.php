@@ -56,16 +56,16 @@
 
         .pending{
             position: absolute;
-            left: 10px;
-            top: 3px;
-            background: #ff5555;
+            left: 365px;
+            top: 25px;
+            background: #25d366;
             margin: 0;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 25px;
+            height: 25px;
             line-height: 10px;
-            padding-top:2px;
-            padding-left:4px;
+            padding-top:6px;
+            padding-left:7px;
             color: #ffffff;
             font-size: 12px;
             border: 2px solid #eeeeee;
@@ -87,7 +87,7 @@
         .message-wrapper{
             padding: 10px;
             height: 500px;
-            background: #eeeeee;
+            background-image: url("../img/wa-background.png");
         }
 
         .messages .message{
@@ -203,13 +203,50 @@
             @yield('content')
         </main>
     </div>
+    <script src="https://js.pusher.com/5.1/pusher.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script>
         let receiver_id = '';
         let my_id = '{{ Auth::id() }}';
 
         $(document).ready(()=>{
-            $('.user').click(function () {
+            // ajax setup form csrf token
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+
+            // Enable pusher logging - don't include this in production
+            Pusher.logToConsole = true;
+
+            var pusher = new Pusher('9a3998ae1d58a1003125', {
+                cluster: 'ap1',
+                forceTLS: true
+            });
+
+            var channel = pusher.subscribe('my-channel');
+            channel.bind('my-event', function (data) {
+            // alert(JSON.stringify(data));
+            if (my_id == data.from) {
+                $('#' + data.to).click();
+            } else if (my_id == data.to) {
+                if (receiver_id == data.from) {
+                    // if receiver is selected, reload the selected user ...
+                    $('#' + data.from).click();
+                } else {
+                    // if receiver is not seleted, add notification for that user
+                    var pending = parseInt($('#' + data.from).find('.pending').html());
+                    if (pending) {
+                        $('#' + data.from).find('.pending').html(pending + 1);
+                    } else {
+                        $('#' + data.from).append('<span class="pending">1</span>');
+                    }
+                }
+            }
+            });
+
+            $('.user').click(function(){
                 $('.user').removeClass('active');
                 $(this).addClass('active');
                 receiver_id = $(this).attr('id');
@@ -223,9 +260,36 @@
                     }
                 });
             });
+
+            $(document).on('keyup', '.input-text input', function(e){
+                let message = $(this).val();
+
+                if(e.keyCode == 13 && message != '' && receiver_id != ''){
+                    $(this).val('')
+                    let datastr = "receiver_id=" + receiver_id + "&message=" + message;
+                    console.log(datastr, "ini datastr")
+                    $.ajax({
+                        type: "post",
+                        url : "message",
+                        data: datastr,
+                        cache: false,
+                        success: function (data){
+
+                        },
+                        error: function (jqXHR, status, err) {
+                        },
+                        complete: function () {
+                        } 
+                    }) 
+                }
+            })
         })
 
-        
+        function scrollToBottomFunc() {
+        $('.message-wrapper').animate({
+                scrollTop: $('.message-wrapper').get(0).scrollHeight
+            }, 50);
+        }        
     </script>
 </body>
 </html>
