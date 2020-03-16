@@ -9,7 +9,9 @@
                 <ul class="users">
                     @foreach($users as $user)
                         <li class="user" id="{{ $user->id }}">
-                        <span class="pending">1</span>
+                        @if($user->unread)
+                            <span class="pending">1</span>
+                        @endif
                         <div class="media">
                             <div class="media-left">
                                 <img src="https://via.placeholder.com/150" alt="" class="media-object">
